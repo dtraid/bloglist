@@ -80,11 +80,22 @@ test('a specific blog is within the returned blogs', async () => {
   const response = await api.get('/api/blogs');
 
   expect(response.body).toContainEqual({
-    _id: '5a422b3a1b54a676234d17f9',
+    id: '5a422b3a1b54a676234d17f9',
     title: 'Canonical string reduction',
     author: 'Edsger W. Dijkstra',
     url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
     likes: 12,
-    __v: 0,
   });
+});
+
+test('unique identifier property of blogs is named id', async () => {
+  const response = await api.get('/api/blogs');
+
+  expect(response.body[0].id).toBeDefined();
+});
+
+test('unique identifier property of blogs is not named _id', async () => {
+  const response = await api.get('/api/blogs');
+
+  expect(response.body[0]._id).toBeUndefined();
 });
