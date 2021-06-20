@@ -29,6 +29,15 @@ const mostBlogs = (blogList) => {
   return authors.reduce((acc, curr) => (curr.blogs > acc.blogs ? curr : acc));
 };
 
+const mostLikes = (blogList) => {
+  const counts = authorCounts(blogList);
+  const authors = Object.keys(counts).map((e) => {
+    return { author: e, likes: counts[e].likes };
+  });
+
+  return authors.reduce((acc, curr) => (curr.likes > acc.likes ? curr : acc));
+};
+
 const totalLikes = (blogList) =>
   blogList.reduce((acc, blog) => acc + blog.likes, 0);
 
@@ -37,4 +46,5 @@ module.exports = {
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
