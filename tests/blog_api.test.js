@@ -99,3 +99,30 @@ test('unique identifier property of blogs is not named _id', async () => {
 
   expect(response.body[0]._id).toBeUndefined();
 });
+
+test('post request successfully adds a new blog post', async () => {
+  const newBlog = {
+    title: 'Ese blog',
+    author: 'Ese Autor',
+    url: 'https://www.eseblog.com',
+    likes: 23,
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
+
+  const response = await api.get('/api/blogs');
+
+  expect(response.body).toHaveLength(initialBlogs.length + 1);
+
+  const blogUrls = response.body.map((blog) => blog.url);
+
+  expect(blogUrls).toContain(newBlog.url);
+});
+
+afterAll(() => {
+  mongoose.connection.close();
+});
