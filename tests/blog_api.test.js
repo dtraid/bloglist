@@ -123,6 +123,26 @@ test('post request successfully adds a new blog post', async () => {
   expect(blogUrls).toContain(newBlog.url);
 });
 
+test('post request likes default to 0', async () => {
+  const newBlog = {
+    title: 'Otro blog',
+    author: 'Otro Autor',
+    url: 'https://www.otroblog.com',
+  };
+
+  const response = await api.post('/api/blogs').send(newBlog);
+
+  expect(response.body.likes).toBe(0);
+});
+
+test('post request without title or url returns 400', async () => {
+  const newBlog = {
+    author: 'Otro Autor',
+  };
+
+  await api.post('/api/blogs').send(newBlog).expect(400);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
